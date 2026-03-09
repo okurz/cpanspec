@@ -1578,6 +1578,12 @@ END
 
 END
 
+    my @llm_docs = grep { m{^(?:CLAUDE|GEMINI|AGENTS)\.md$}i } @files;
+    if (@llm_docs) {
+        print $spec "# manual bypass of LLM agent targeted development helpers\n";
+        print $spec "rm -f @llm_docs\n\n";
+    }
+
     if ($execs) {
         print $spec qq{find . -type f ! -path "*/t/*" ! -name "*.pl" ! -path "*/bin/*" ! -path "*/script/*" ! -path "*/scripts/*" ! -name "configure" -print0 | xargs -0 chmod 644\n};
     }
@@ -2187,6 +2193,7 @@ sub find_doc {
             and !/^INSTALL/i
             and !/^META\..+$/i
             and !/^MYMETA\..+$/i
+            and !/^(?:CLAUDE|GEMINI|AGENTS)\.md$/i
             and !/^perlcritic/
             and !/^perltidy/
             and !/\.tar\./
